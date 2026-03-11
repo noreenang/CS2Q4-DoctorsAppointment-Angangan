@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Admin - Appointments{% endblock %}
+
+{% block content %}
+<h2>Registered Patients</h2>
+{% if patients %}
+<table>
+   <tr><th>Username</th><th>Name</th><th>Age</th><th>Address</th></tr>
+   {% for uname, info in patients.items() %}
+   <tr>
+      <td>{{ uname }}</td>
+      <td>{{ info.name }}</td>
+      <td>{{ info.age }}</td>
+      <td>{{ info.address }}</td>
+   </tr>
+   {% endfor %}
+</table>
+{% else %}
+<p>No patients registered.</p>
+{% endif %}
+
+<hr>
+
+<h2>All Appointments</h2>
+{% if appointments %}
+<table>
+   <tr><th>Username</th><th>Name</th><th>Appointment</th></tr>
+   {% for appt in appointments %}
+   <tr>
+      <td>{{ appt.username }}</td>
+      <td>{{ appt.name }}</td>
+      <td>{{ appt.appointment|format_date }}</td>
+   </tr>
+   {% endfor %}
+</table>
+{% else %}
+<p>No appointments yet.</p>
+{% endif %}
+{% endblock %}
