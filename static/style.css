@@ -115,7 +115,6 @@ h2 {
 }
 
 input,
-button,
 label {
     display: block;
     width: 100%;
@@ -126,6 +125,37 @@ label {
     font-size: 1rem;
 }
 
+button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    margin: 7px 6px 12px 0;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    transition: transform 130ms ease, opacity 130ms ease, filter 130ms ease;
+}
+
+button + button,
+.button + .button,
+.button + a,
+a + .button {
+    margin-left: 8px;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    margin-top: 8px;
+}
+
 input {
     background: rgba(255,255,255,0.72);
 }
@@ -134,14 +164,6 @@ input:focus {
     outline: none;
     border-color: rgba(79, 70, 229, 0.9);
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
-}
-
-button {
-    background: linear-gradient(135deg, var(--primary), var(--primary-2));
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: transform 130ms ease, opacity 130ms ease, filter 130ms ease;
 }
 
 button:hover {
@@ -157,6 +179,154 @@ button:active {
 button:disabled {
     opacity: 0.55;
     cursor: not-allowed;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    min-height: 44px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: white;
+    text-decoration: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: transform 130ms ease, opacity 130ms ease, filter 130ms ease;
+    margin-right: 8px;
+    border: none;
+}
+
+.button:hover {
+    opacity: 0.96;
+    transform: translateY(-1px);
+    filter: drop-shadow(0 8px 18px rgba(79, 70, 229, 0.3));
+}
+
+.button.delete {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+.button.delete:hover {
+    filter: drop-shadow(0 8px 18px rgba(220, 38, 38, 0.3));
+}
+
+.update-btn {
+    background: linear-gradient(135deg, #059669, #10b981);
+    font-weight: 600;
+    padding: 14px 16px;
+}
+
+.update-btn:hover {
+    filter: drop-shadow(0 8px 18px rgba(5, 150, 105, 0.3));
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+    align-items: stretch;
+}
+
+.form-actions button,
+.form-actions .button {
+    flex: 1;
+    min-width: 140px;
+    margin-bottom: 0;
+}
+
+.cancel-link,
+.button.cancel-btn,
+.button.confirm-btn,
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: white;
+    text-decoration: none;
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: transform 130ms ease, opacity 130ms ease, filter 130ms ease;
+}
+
+.cancel-link:hover,
+.button.cancel-btn:hover,
+.back-link:hover {
+    opacity: 0.96;
+    transform: translateY(-1px);
+    filter: drop-shadow(0 8px 18px rgba(220, 38, 38, 0.3));
+}
+
+.update-btn {
+    background: linear-gradient(135deg, #059669, #10b981);
+    font-weight: 600;
+    min-width: 140px;
+    min-height: 44px;
+    padding: 12px 16px;
+    border: none;
+}
+
+.update-btn:hover {
+    filter: drop-shadow(0 8px 18px rgba(5, 150, 105, 0.3));
+}
+
+.action-alert {
+    border: 1px solid rgba(55, 65, 81, 0.3);
+    background: rgba(255, 255, 255, 0.93);
+    padding: 14px;
+    border-radius: 14px;
+    margin: 14px 0;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.14);
+}
+
+.action-alert p {
+    margin: 0 0 10px;
+    color: #111827;
+    font-weight: 600;
+}
+
+.alert-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.confirm-btn {
+    flex: 1;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+}
+
+.cancel-btn {
+    flex: 1;
+}
+
+.cancel-link:hover {
+    opacity: 0.96;
+    transform: translateY(-1px);
+    filter: drop-shadow(0 8px 18px rgba(220, 38, 38, 0.3));
+}
+
+.back-link {
+    background: linear-gradient(135deg, #6b7280, #9ca3af);
+    color: white;
+    text-decoration: none;
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    transition: transform 130ms ease, opacity 130ms ease, filter 130ms ease;
+}
+
+.back-link:hover {
+    opacity: 0.96;
+    transform: translateY(-1px);
+    filter: drop-shadow(0 8px 18px rgba(107, 114, 128, 0.3));
 }
 
 table {
@@ -215,4 +385,28 @@ tr:hover td {
     background: rgba(212, 237, 218, 0.96);
     color: #0f5132;
     border: 1px solid rgba(195, 230, 203, 0.9);
+}
+
+@media (max-width: 660px) {
+    body {
+        padding: 0 12px 32px;
+    }
+
+    nav {
+        gap: 8px;
+        padding: 10px 10px;
+    }
+
+    button,
+    .button,
+    .cancel-link,
+    .back-link {
+        width: 100%;
+        min-width: unset;
+        margin: 8px 0;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
 }

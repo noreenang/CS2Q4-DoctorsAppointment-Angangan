@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Edit Appointment{% endblock %}
+
+{% block content %}
+<h2>Edit Appointment</h2>
+<div class="action-alert" id="action-alert" aria-live="polite" style="display:none;">
+    <p id="alert-text"></p>
+    <div class="alert-buttons">
+        <button id="confirm-action" class="button confirm-btn">Confirm</button>
+        <button id="cancel-action" class="button cancel-btn">No</button>
+    </div>
+</div>
+<form id="save-form" method="POST" action="{{ url_for('update_appointment', appt_id=appointment.id) }}">
+    <label for="appointment">Date/Time:</label>
+    <input type="datetime-local" name="appointment" id="appointment" required value="{{ appointment.appointment }}">
+    <div class="form-actions">
+        <button type="button" class="update-btn" id="save-button">Save</button>
+        <button type="button" class="button cancel-link" id="cancel-button">Cancel</button>
+    </div>
+</form>
+<form method="POST" action="{{ url_for('cancel_appointment', appt_id=appointment.id) }}" style="display: none;" id="cancel-form"></form>
+<script>
+const actionAlert = document.getElementById('action-alert');
+const alertText = document.getElementById('alert-text');
+const confirmAction = document.getElementById('confirm-action');
+const cancelAction = document.getElementById('cancel-action');
+const saveForm = document.getElementById('save-form');
+const cancelForm = document.getElementById('cancel-form');
+const saveButton = document.getElementById('save-button');
+const cancelButton = document.getElementById('cancel-button');
+
+function showConfirm(message, onConfirm) {
+    alertText.textContent = message;
+    actionAlert.style.display = 'block';
+    confirmAction.focus();
+
+    function cleanup() {
+        actionAlert.style.display = 'none';
+        confirmAction.removeEventListener('click', confirmHandler);
+        cancelAction.removeEventListener('click', cancelHandler);
+    }
+
+    function confirmHandler(e) {
+        e.preventDefault();
+        cleanup();
+        onConfirm();
+    }
+
+    function cancelHandler(e) {
+        e.preventDefault();
+        cleanup();
+    }
+
+    confirmAction.addEventListener('click', confirmHandler);
+    cancelAction.addEventListener('click', cancelHandler);
+}
+
+saveButton.addEventListener('click', function(e) {
+    showConfirm('Do you want to save your changes to this appointment?', function() {
+        saveForm.submit();
+    });
+});
+
+cancelButton.addEventListener('click', function(e) {
+    showConfirm('Discard changes and go back?', function() {
+        window.location.href = '{{ return_url }}';
+    });
+});
+</script>
+<p><a href="{{ return_url }}">Back</a></p>
+{% endblock %}

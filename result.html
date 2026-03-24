@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MediBook</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>MediBook</h1>
+    </header>
+    <nav>
+        
+            <a href="/admin">Admin Dashboard</a> |
+        
+        
+        
+            <a href="/logout">Logout</a>
+        
+    </nav>
+
+    
+        
+            <div class="flashes">
+                
+                    <div class="flash success">Logged in as admin.</div>
+                
+            </div>
+        
+    
+
+    <div class="content">
+        
+<h2>Registered Patients</h2>
+
+<table>
+   <tr><th>Username</th><th>Name</th><th>Age</th><th>Address</th><th>Actions</th></tr>
+   
+   <tr>
+      <td>jdoe</td>
+      <td>John Doe</td>
+      <td>35</td>
+      <td>123 Maple St</td>
+      <td>
+         <form method="post" action="/admin/patient/jdoe/delete" style="display:inline" onsubmit="return confirm('Delete jdoe? This cannot be undone.');">
+             <button type="submit" class="button delete">Delete</button>
+         </form>
+      </td>
+   </tr>
+   
+   <tr>
+      <td>asmith</td>
+      <td>Alice Smith</td>
+      <td>29</td>
+      <td>456 Oak St</td>
+      <td>
+         <form method="post" action="/admin/patient/asmith/delete" style="display:inline" onsubmit="return confirm('Delete asmith? This cannot be undone.');">
+             <button type="submit" class="button delete">Delete</button>
+         </form>
+      </td>
+   </tr>
+   
+</table>
+
+
+<hr>
+
+<h2>All Appointments</h2>
+
+<table>
+   <tr><th>Appointment ID</th><th>Username</th><th>Name</th><th>Appointment</th><th>Status</th><th>Actions</th></tr>
+   
+   <tr>
+      <td>1</td>
+      <td>jdoe</td>
+      <td>John Doe</td>
+      <td>10-10-2026, 10:00 AM</td>
+      <td>Scheduled</td>
+      <td>
+        
+        <a class="button" href="/appointment/1/edit">Update</a>
+        <form method="POST" action="/appointment/1/cancel" style="display:inline" onsubmit="return confirm('Cancel this appointment?');">
+            <button type="submit" class="button delete">Cancel</button>
+        </form>
+        
+      </td>
+   </tr>
+   
+   <tr>
+      <td>2</td>
+      <td>asmith</td>
+      <td>Alice Smith</td>
+      <td>11-01-2026, 02:30 PM</td>
+      <td>Scheduled</td>
+      <td>
+        
+        <a class="button" href="/appointment/2/edit">Update</a>
+        <form method="POST" action="/appointment/2/cancel" style="display:inline" onsubmit="return confirm('Cancel this appointment?');">
+            <button type="submit" class="button delete">Cancel</button>
+        </form>
+        
+      </td>
+   </tr>
+   
+   <tr>
+      <td>3</td>
+      <td>jdoe</td>
+      <td>John Doe</td>
+      <td>09-20-2026, 09:00 AM</td>
+      <td>cancelled</td>
+      <td>
+        
+           <span class="muted">No actions</span>
+        
+      </td>
+   </tr>
+   
+</table>
+
+
+    </div>
+</body>
+</html>

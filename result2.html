@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MediBook</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>MediBook</h1>
+    </header>
+    <nav>
+        
+        
+            <a href="/dashboard">My Dashboard</a> |
+        
+        
+            <a href="/logout">Logout</a>
+        
+    </nav>
+
+    
+        
+            <div class="flashes">
+                
+                    <div class="flash success">Welcome, John Doe!</div>
+                
+            </div>
+        
+    
+
+    <div class="content">
+        
+<h2>Welcome, John Doe</h2>
+<p>Age: 35</p>
+<p>Address: 123 Maple St</p>
+<a href="/book">Book Appointment</a>
+
+<h3>Your Scheduled Appointments</h3>
+
+   <table>
+      <tr><th>Date/Time</th><th>Actions</th></tr>
+      
+      <tr>
+         <td>10-10-2026, 10:00 AM</td>
+         <td>
+             <a class="button" href="/appointment/1/edit">Update</a>
+             <form method="POST" action="/appointment/1/cancel" style="display:inline" onsubmit="return confirm('Cancel this appointment?');">
+                 <button type="submit" class="button delete">Cancel</button>
+             </form>
+         </td>
+      </tr>
+      
+   </table>
+
+
+
+
+
+    </div>
+</body>
+</html>

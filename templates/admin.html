@@ -5,13 +5,19 @@
 <h2>Registered Patients</h2>
 {% if patients %}
 <table>
-   <tr><th>Username</th><th>Name</th><th>Age</th><th>Address</th></tr>
+   <tr><th>Username</th><th>Name</th><th>Age</th><th>Address</th><th>Actions</th></tr>
    {% for uname, info in patients.items() %}
    <tr>
       <td>{{ uname }}</td>
       <td>{{ info.name }}</td>
       <td>{{ info.age }}</td>
       <td>{{ info.address }}</td>
+      <td>
+         <a class="button" href="{{ url_for('edit_patient', username=uname) }}">Edit</a>
+         <form method="post" action="{{ url_for('delete_patient', username=uname) }}" style="display:inline" onsubmit="return confirm('Delete {{ uname }}? This cannot be undone.');">
+             <button type="submit" class="button delete">Delete</button>
+         </form>
+      </td>
    </tr>
    {% endfor %}
 </table>
@@ -24,12 +30,24 @@
 <h2>All Appointments</h2>
 {% if appointments %}
 <table>
-   <tr><th>Username</th><th>Name</th><th>Appointment</th></tr>
+   <tr><th>Appointment ID</th><th>Username</th><th>Name</th><th>Appointment</th><th>Status</th><th>Actions</th></tr>
    {% for appt in appointments %}
    <tr>
+      <td>{{ appt.id }}</td>
       <td>{{ appt.username }}</td>
       <td>{{ appt.name }}</td>
       <td>{{ appt.appointment|format_date }}</td>
+      <td>{{ appt.status|capitalize }}</td>
+      <td>
+        {% if appt.status == 'scheduled' %}
+        <a class="button" href="{{ url_for('edit_appointment', appt_id=appt.id) }}">Update</a>
+        <form method="POST" action="{{ url_for('cancel_appointment', appt_id=appt.id) }}" style="display:inline" onsubmit="return confirm('Cancel this appointment?');">
+            <button type="submit" class="button delete">Cancel</button>
+        </form>
+        {% else %}
+           <span class="muted">No actions</span>
+        {% endif %}
+      </td>
    </tr>
    {% endfor %}
 </table>
