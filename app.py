@@ -24,11 +24,13 @@ patients = {
     "gaebrahamlincoln": {"password": "gaeblu", "name": "Gabrinne Adanneij M. Lu", "age": 14, "address": "Pagadian City"},
     "theysammyrollin": {"password": "kaitlynsilao", "name": "Samantha Kaitlyn A. Silao", "age": 13, "address": "Pagadian City"},
     "kiel.nadonza": {"password": "klkiel722", "name": "KL Denise T. Nadonza", "age": 13, "address": "Pagadian City"},
-    "atinapay": {"password": "athenacortes12", "name": "Athena M. Cortes", "age": 13, "address": "Pagadian City"},
+    "atinapay": {"password": "athenacortesol", "name": "Athena M. Cortes", "age": 13, "address": "Pagadian City"},
     "yomizyo": {"password": "sasalele2012", "name": "Alizzandra Aeve T. Alzaabi", "age": 13, "address": "Pagadian City"},
     "tammycakes": {"password": "tammycakes123", "name": "Tamarack Baumann", "age": 14, "address": "Golden Grove"},
     "qiucakes": {"password": "qiucakes123", "name": "Qiu \"Autumn\" Lin", "age": 14, "address": "Golden Grove"},
+    "tetris": {"password": "tetris", "name": "Johst Fohr A. Thest", "age": 33, "address": "Home Base"}
 }
+
 appointments = [
     {"id": 1, "username": "jaildoe", "name": "John Doe", "appointment": "2026-10-10T10:00", "status": "scheduled"},
     {"id": 2, "username": "asmith", "name": "Alice Smith", "appointment": "2026-11-01T14:30", "status": "scheduled"},
@@ -349,6 +351,77 @@ def update_patient(username):
 
     flash("Patient information updated successfully.", "success")
     return redirect(url_for("admin"))
+
+
+# USER PROFILE EDIT (for logged-in patients)
+@app.route("/profile/edit")
+def edit_profile():
+    user = session.get("user")
+    if not user or user not in patients:
+        flash("Please log in.", "error")
+        session.pop("user", None)
+        return redirect(url_for("login"))
+    
+    return render_template("edit_user.html", patient=patients[user], username=user)
+
+
+# USER PROFILE UPDATE (for logged-in patients)
+@app.route("/profile/update", methods=["POST"])
+def update_profile():
+    user = session.get("user")
+    if not user or user not in patients:
+        flash("Please log in.", "error")
+        session.pop("user", None)
+        return redirect(url_for("login"))
+    
+    # Get form data
+    name = request.form.get("name", "").strip()
+    age_str = request.form.get("age", "").strip()
+    address = request.form.get("address", "").strip()
+    
+    # Validation for empty fields
+    if not name:
+        flash("Name cannot be empty.", "error")
+        return redirect(url_for("edit_profile"))
+    
+    if not age_str:
+        flash("Age cannot be empty.", "error")
+        return redirect(url_for("edit_profile"))
+    
+    if not address:
+        flash("Address cannot be empty.", "error")
+        return redirect(url_for("edit_profile"))
+    
+    # Age validation
+    try:
+        age = int(age_str)
+        if age <= 0:
+            flash("Age must be a positive number.", "error")
+            return redirect(url_for("edit_profile"))
+    except ValueError:
+        flash("Age must be a valid number.", "error")
+        return redirect(url_for("edit_profile"))
+    
+    # Check if any changes were made
+    changes_made = False
+    if patients[user]["name"] != name:
+        changes_made = True
+    if patients[user]["age"] != age:
+        changes_made = True
+    if patients[user]["address"] != address:
+        changes_made = True
+    
+    if not changes_made:
+        flash("No changes were made.", "info")
+        return redirect(url_for("edit_profile"))
+    
+    # Update patient info
+    patients[user]["name"] = name
+    patients[user]["age"] = age
+    patients[user]["address"] = address
+    
+    flash("Profile updated successfully.", "success")
+    return redirect(url_for("dashboard"))
 
 
 #LOGOUT 
