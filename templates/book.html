@@ -5,7 +5,7 @@
 <h2>Book an Appointment</h2>
 <form method="POST">
     <label for="appointment">Date/Time:</label>
-    <input type="datetime-local" name="appointment" id="appointment" required>
+    <input type="datetime-local" name="appointment" id="appointment" required min="{{ min_datetime }}">
     <button type="submit">Book</button>
 </form>
 {% endblock %}

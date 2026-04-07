@@ -4,9 +4,17 @@
 {% block content %}
 <div class="container">
     <h2>Login</h2>
-    <form method="POST" novalidate>
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
+    <form method="POST">
+        <div class="form-group">
+            <label class="field-label" for="username">Username</label>
+            <input id="username" class="form-input" type="text" name="username" placeholder="Username" required>
+        </div>
+
+        <div class="form-group">
+            <label class="field-label" for="password">Password</label>
+            <input id="password" class="form-input" type="password" name="password" placeholder="Password" required>
+        </div>
+
         <button type="submit">Login</button>
     </form>
     <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>

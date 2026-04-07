@@ -9,7 +9,7 @@ app.secret_key = "secretkey"
 def format_date(value):
     try:
         dt = datetime.strptime(value, "%Y-%m-%dT%H:%M")
-        # Display in 12-hour format with AM/PM
+        # display in 12-hour format with AM/PM
         return dt.strftime("%m-%d-%Y, %I:%M %p")
     except Exception:
         return value
@@ -57,7 +57,7 @@ def home():
     return redirect(url_for("login"))
 
 
-#REGISTER
+#Register new patients
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -110,7 +110,7 @@ def register():
     return render_template("register.html")
 
 
-#  LOGIN 
+#  Login route for both patients and admin
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -142,38 +142,41 @@ def login():
     return render_template("login.html")
 
 
-# PATIENT DASHBOARD
+# Patient dashboard
 @app.route("/dashboard")
 def dashboard():
     user = session.get("user")
     # ensure session user exists and still has a patient record
     if user and user in patients:
         user_appointments = [a for a in appointments if a["username"] == user and a.get("status", "scheduled") == "scheduled"]
-        cancelled = [a for a in appointments if a["username"] == user and a.get("status", "scheduled") == "cancelled"]
+        cancelled = [a for a in appointments if a["username"] == user and a.get("status") == "cancelled"]
         return render_template("dashboard.html", patient=patients[user], appointments=user_appointments, cancelled=cancelled)
     # invalid session--clear and send to login
     session.pop("user", None)
     return redirect(url_for("login"))
 
 
-# BOOK APPOINTMENT
+# Book appointments
 @app.route("/book", methods=["GET", "POST"])
 def book():
     if "user" in session and session["user"] in patients:
         if request.method == "POST":
             appointment_date = request.form["appointment"]
 
-            # ensure year is 2026 or later
+            # ensure year is 2026 or later and date is not in the past
             try:
                 # datetime-local format: YYYY-MM-DDTHH:MM
-                year = int(appointment_date.split("-")[0])
+                selected = datetime.strptime(appointment_date, "%Y-%m-%dT%H:%M")
+                if selected < datetime.now():
+                    flash("Appointment date cannot be in the past.", "error")
+                    return render_template("book.html", min_datetime=datetime.now().strftime("%Y-%m-%dT%H:%M"))
             except Exception:
                 flash("Invalid appointment date format.", "error")
-                return render_template("book.html")
+                return render_template("book.html", min_datetime=datetime.now().strftime("%Y-%m-%dT%H:%M"))
 
-            if year < 2026:
+            if selected.year < 2026:
                 flash("Appointment year must be 2026 or later.", "error")
-                return render_template("book.html")
+                return render_template("book.html", min_datetime=datetime.now().strftime("%Y-%m-%dT%H:%M"))
 
             global next_appointment_id
             appointments.append({
@@ -188,7 +191,7 @@ def book():
             flash("Appointment booked successfully.", "success")
             return redirect(url_for("dashboard"))
 
-        return render_template("book.html")
+        return render_template("book.html", min_datetime=datetime.now().strftime("%Y-%m-%dT%H:%M"))
 
     # either not logged in or invalid user record
     session.pop("user", None)
@@ -270,17 +273,37 @@ def cancel_appointment(appt_id):
         flash("Unauthorized.", "error")
         return redirect(url_for("login"))
 
+    if appt.get("status", "scheduled") == "cancelled":
+        flash("This appointment is already cancelled.", "info")
+        return redirect(url_for("admin") if "admin" in session else url_for("dashboard"))
+
     appt["status"] = "cancelled"
     flash("Appointment cancelled successfully.", "success")
     return redirect(url_for("admin") if "admin" in session else url_for("dashboard"))
 
 
-#  ADMIN PAGE 
+#  ADMIN PAGE
 @app.route("/admin")
 def admin():
     if "admin" in session:
         return render_template("admin.html", patients=patients, appointments=appointments)
     return redirect(url_for("login"))
+
+
+@app.route("/admin/appointment/<int:appt_id>/delete", methods=["POST"])
+def delete_appointment(appt_id):
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    appt = get_appointment(appt_id)
+    if not appt:
+        flash("Appointment not found.", "error")
+        return redirect(url_for("admin"))
+
+    global appointments
+    appointments = [a for a in appointments if a["id"] != appt_id]
+    flash("Appointment record deleted successfully.", "success")
+    return redirect(url_for("admin"))
 
 
 @app.route("/admin/patient/<username>/delete", methods=["POST"])

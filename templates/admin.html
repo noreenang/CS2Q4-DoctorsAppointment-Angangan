@@ -44,9 +44,10 @@
         <form method="POST" action="{{ url_for('cancel_appointment', appt_id=appt.id) }}" style="display:inline" onsubmit="return confirm('Cancel this appointment?');">
             <button type="submit" class="button delete">Cancel</button>
         </form>
-        {% else %}
-           <span class="muted">No actions</span>
         {% endif %}
+        <form method="POST" action="{{ url_for('delete_appointment', appt_id=appt.id) }}" style="display:inline" onsubmit="return confirm('Delete appointment #{{ appt.id }}?');">
+            <button type="submit" class="button delete">Delete</button>
+        </form>
       </td>
    </tr>
    {% endfor %}
