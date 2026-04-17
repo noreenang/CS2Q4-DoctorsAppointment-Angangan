@@ -70,7 +70,7 @@ def register():
 
         
         if not username or not password or not name or not address:
-            error = "All fields are required and cannot be blank."
+            error = "please fill out this field"
             flash(error, "error")
             return redirect(url_for("register"))
 
